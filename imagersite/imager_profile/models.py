@@ -10,7 +10,9 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 class ActiveManager(models.Manager):
     """Manage the set of active users."""
+
     def get_queryset(self):
+        """Return only the active users."""
         return super(ActiveManager, self).get_queryset()\
             .filter(user__is_active=True).all()
 
@@ -75,6 +77,7 @@ class ImagerProfile(models.Model):
         null=True
     )
 
+    objects = models.Manager()
     active = ActiveManager()
 
     @property
