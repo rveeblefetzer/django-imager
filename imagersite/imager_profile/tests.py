@@ -37,3 +37,17 @@ class ProfileTestCase(TestCase):
         user = self.users[0]
         self.assertTrue(hasattr(user, "profile"))
         self.assertIsInstance(user.profile, ImagerProfile)
+
+    def test_profile_is_active_property(self):
+        """Test the ImagerProfile is_active property."""
+        user = self.users[0]
+        self.assertTrue(user.profile.is_active)
+        user.is_active = False
+        self.assertFalse(user.profile.is_active)
+
+    def test_profile_active_manager_returns_active_profiles(self):
+        """Test the ActiveManager filters active profiles."""
+        self.assertTrue(ImagerProfile.active.count() == 20)
+        user = self.users[0]
+        user.is_active = False
+        self.assertTrue(ImagerProfile.active.count() == 19)
