@@ -33,6 +33,8 @@ var/
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
+*pip-selfcheck.json
+*pyvenv.cfg
 
 # Unit test / coverage reports
 htmlcov/
