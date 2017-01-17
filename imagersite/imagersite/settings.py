@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'phonenumber_field',
+    'imager_profile'
 ]
 
 MIDDLEWARE = [
@@ -78,7 +79,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'imager_db',
-        'USER': 'hotsauce',
+        'USER': 'CCallahanIV',
         'HOST': '127.0.0.1',
         'PORT': '5432',
         'TEST': {

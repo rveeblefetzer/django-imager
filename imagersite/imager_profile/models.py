@@ -8,6 +8,13 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 # Create your models here.
 
+class ActiveManager(models.Manager):
+    """Manage the set of active users."""
+    def get_queryset(self):
+        return super(ActiveManager, self).get_queryset()\
+            .filter(user__is_active=True).all()
+
+
 class ImagerProfile(models.Model):
     """This is the site's user profile object."""
 
@@ -45,48 +52,42 @@ class ImagerProfile(models.Model):
         max_length=255,
         choices=CAMERA_TYPES,
         default="pinhole",
+        null=True
     )
     address = models.CharField(
         max_length=255,
         blank=True,
         null=True,
     )
-    bio = models.TextField()
-    personal_website = models.URLField(max_length=200)
+    bio = models.TextField(null=True)
+    personal_website = models.URLField(max_length=200, null=True)
     hireable = models.BooleanField(default=True)
     travel_radius = models.DecimalField(
         max_digits=5,
-        decimal_places=1
+        decimal_places=1,
+        null=True
     )
-    phone = PhoneNumberField()
+    phone = PhoneNumberField(null=True)
     photography_type = models.CharField(
         max_length=255,
         choices=PHOTOGRAPHY_TYPE,
         default="selfies",
+        null=True
     )
 
-    def active(self):
-        pass
-
+    active = ActiveManager()
 
     @property
     def is_active(self):
-        
+        """Return wether the user attached to this profile is active."""
+        return self.user.is_active
 
-
->>> class Foo(object):
-...     @property
-...     def bar(self):
-...         return 'baz'
-...
->>> F = Foo()
->>> print F.bar
-baz
-**
+    def __str__(self):
+        return self.user.username
 
 
 @receiver(post_save, sender=User)
 def make_profile_for_user(sender, instance, **kwargs):
     """Ensure new profile created for every user."""
-   new_profile = ImagerProfile(user=instance)
-   new_profile.save()
+    new_profile = ImagerProfile(user=instance)
+    new_profile.save()
