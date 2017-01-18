@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-LOGIN_REDIRECT_URL = '/home'
+LOGIN_REDIRECT_URL = 'home'
 
 # Application definition
 
@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'phonenumber_field',
-    'imager_profile'
+    'imager_profile',
+    'imagersite'
 ]
 
 MIDDLEWARE = [
