@@ -84,7 +84,7 @@ DATABASES = {
         'HOST': '127.0.0.1',
         'PORT': '5432',
         'TEST': {
-            'NAME': os.environ.get("TEST_IMAGER_DB", "test_imager_db")
+            'NAME': os.environ.get("TEST_IMAGER_DB", "test_imager_db2")
         }
     }
 }
