@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'phonenumber_field',
     'imager_profile',
-    'imagersite'
+    'imagersite',
+    'imager_images',
 ]
 
 MIDDLEWARE = [
