@@ -73,8 +73,7 @@ class ImagerProfile(models.Model):
     photography_type = models.CharField(
         max_length=255,
         choices=PHOTOGRAPHY_TYPE,
-        default="selfies",
-        null=True
+        default="selfies"
     )
 
     objects = models.Manager()
