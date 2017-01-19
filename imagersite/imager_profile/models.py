@@ -92,5 +92,6 @@ class ImagerProfile(models.Model):
 @receiver(post_save, sender=User)
 def make_profile_for_user(sender, instance, **kwargs):
     """Ensure new profile created for every user."""
-    new_profile = ImagerProfile(user=instance)
-    new_profile.save()
+    if kwargs["created"]:
+        new_profile = ImagerProfile(user=instance)
+        new_profile.save()
