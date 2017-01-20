@@ -9,6 +9,8 @@ PUBLISH_STATE = (
 
 class Album(models.Model):
     """The site's object for user photo albums."""
+    objects = models.Manager()
+
     title = models.CharField(
         max_length=255,
         blank=True,
@@ -35,6 +37,7 @@ class Album(models.Model):
 
 class Photo(models.Model):
     """This is the site's photo object."""
+    objects = models.Manager()
 
     title = models.CharField(
         max_length=255,
