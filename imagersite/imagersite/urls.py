@@ -21,5 +21,6 @@ from imagersite.views import (home_view,
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', home_view, name="home"),
-    url(r'^accounts/', include('registration.backends.hmac.urls'))
+    url(r'^', include('django.contrib.auth.urls')),
+    url(r'^accounts/', include('registration.backends.hmac.urls')),
 ]
