@@ -2,46 +2,35 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from imager_images.models import Photo, Album
 import factory
+import os
+from django.core.file import File
+from faker import Faker
 
-# Found the following commented lines first, but now seeing FactoryBoy might have this built in
-# from PIL import Image
-# import tempfile
-# from django.test import override_settings
+fake = Faker()
 
-# def get_temporary_image(temp_file):
-#     size = (200, 200)
-#     color = (255, 0, 0, 0)
-#     image = Image.new("RGBA", size, color)
-#     image.save(temp_file, 'jpeg')
-#     return temp_file
+# Assumes there is a test.png next to our tests.py
+TEST_IMAGE = os.path.join(os.path.dirname(__file__), 'test.png')
 
+class PhotoFactory(factory.django.DjangoModelFactory):
+        class Meta:
+            model = models.Photo
 
-# class PhotoTestCase(TestCase):
-#     """The Photo model test runner."""
-
-#     @override_settings(MEDIA_ROOT=tempfile.gettempdir())
-#     def test_dummy_test(self):
-#             temp_file = tempfile.NamedTemporaryFile()
-#             test_image = get_temporary_image(temp_file)
-#             #test_image.seek(0)
-#             picture = Picture.objects.create(picture=test_image.name)
-#             print("It Worked!, ", picture.picture)
-#             self.assertEqual(len(Picture.objects.all()), 1)
+        image = factory.LazyAttribute(lambda t: File(open(TEST_IMAGE)))
+        author = fake.name()
+        description = fake.paragraph()
+        date_created = fake.date(pattern="%Y-%m-%d")
+        date_modified = fake.date(pattern="%Y-%m-%d")
+        date_published = ""
+        published = "private"
+        albums = ""
 
 
-    class PhotoFactory(factory.django.DjangoModelFactory):
-            class Meta:
-                model = models.Photo
-
-            the_image = factory.django.ImageField(color='blue')
+def setUp(self):
+    """The appropriate setup for the appropriate test."""
+    self.photos = [self.PhotoFactory.create() for i in range(20)]
 
 
-    def setUp(self):
-        """The appropriate setup for the appropriate test."""
-        self.photos = [self.PhotoFactory.create() for i in range(20)]
-
-
-    def test_profile_is_made_when_user_is_saved(self):
-        """Test that an image is saved when saved."""
-        self.assertTrue(Photo.objects.count() == 20)
+def test_that_the_test_factory_works(self):
+    """Test that this is happening."""
+    self.assertTrue(Photo.objects.count() == 20)
 
