@@ -1,11 +1,13 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
+from django.core.files.uploadedfile import SimpleUploadedFile
 from imager_images.models import Photo, Album
 import factory
 import os
 from faker import Faker
 import datetime
 from django.db import transaction
+
 
 fake = Faker()
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -19,7 +21,7 @@ class ImageTestCase(TestCase):
     #         model = Photo
 
     #     image = open(TEST_IMAGE_PATH)
-    #     author = 
+    #     author =
     #     description = fake.paragraph()
     #     date_created = fake.date(pattern="%Y-%m-%d")
     #     date_modified = fake.date(pattern="%Y-%m-%d")
@@ -42,11 +44,18 @@ class ImageTestCase(TestCase):
 
     def test_data_fields_can_be_filled(self):
         """Test instantiating a photo with full data fields."""
+        upl_image = SimpleUploadedFile(
+            name='test.png',
+            content=open(TEST_IMAGE_PATH, 'rb').read(),
+            content_type='image/png'
+        )
+
         photographer = User.objects.first()
-        pic = Photo(author=photographer,
-                    title="test_title",
-                    description="test_description",
-                    # image=open(TEST_IMAGE_PATH).read()
+        pic = Photo(
+            author=photographer,
+            title="test_title",
+            description="test_description",
+            image=upl_image
         )
         pic.save()
         self.assertIsInstance(pic.date_uploaded, datetime.date)
@@ -58,27 +67,34 @@ class ImageTestCase(TestCase):
     def test_album_connects_with_user(self):
         """Test that an album can be associated with a user."""
         photographer = User.objects.first()
-        test_photo_set = Album(title="Test Photo Set",
-                                owner=photographer,
+        test_photo_set = Album(
+            title="Test Photo Set",
+            owner=photographer,
         )
         test_photo_set.save()
         self.assertTrue(test_photo_set.owner.username == "joe")
 
     def test_photo_connects_with_album(self):
         """Test that a photo can be associated with an album."""
+        upl_image = SimpleUploadedFile(
+            name='test.png',
+            content=open(TEST_IMAGE_PATH, 'rb').read(),
+            content_type='image/png'
+        )
+
         photographer = User.objects.first()
-        test_photo_set = Album(title="Test Photo Set",
-                                owner=photographer,
+        test_photo_set = Album(
+            title="Test Photo Set",
+            owner=photographer,
         )
         test_photo_set.save()
-        pic = Photo(author=photographer,
-                    title="test_title",
-                    description="test_description",
-                    image=TEST_IMAGE_PATH,
+        pic = Photo(
+            author=photographer,
+            title="test_title",
+            description="test_description",
+            image=upl_image,
         )
         pic.save()
         pic.albums = [test_photo_set]
-        import pdb; pdb.set_trace()
         self.assertTrue(Album.objects.first().id == 2)
         self.assertTrue(Photo.objects.filter(albums__id=2).first().title == "test_title")
-

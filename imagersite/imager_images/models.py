@@ -7,6 +7,7 @@ PUBLISH_STATE = (
     ("public", "Public"),
 )
 
+
 class Album(models.Model):
     """The site's object for user photo albums."""
     objects = models.Manager()
