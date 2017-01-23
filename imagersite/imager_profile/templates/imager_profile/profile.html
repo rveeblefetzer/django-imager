@@ -1,0 +1,19 @@
+{% extends 'layout.html' %}
+{% block body %}
+    <h3>{{user.username}}'s Profile Page</h3>
+    <p>{{user.email}}</p>
+    <p>
+
+    <h5>Albums:</h5>
+    <ul>
+        {% for album in albums %}
+        <li>
+            <a href="">{{album.title}}</a>
+        </li>
+        {% endfor %}
+    </ul>
+
+    {% if user.is_authenticated %}
+
+    {% endif %}
+{% endblock %}
