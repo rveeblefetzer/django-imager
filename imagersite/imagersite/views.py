@@ -12,7 +12,7 @@ def home_view(request):
     usrlist = User.objects.all()
     bg_photos = Photo.published_photos.all()
     if len(bg_photos):
-        img_url = random.choice(bg_photos).url
+        img_url = random.choice(bg_photos).image.url
     else:
         img_url = os.path.join(settings.MEDIA_URL, "photos/rainier.jpg")
 

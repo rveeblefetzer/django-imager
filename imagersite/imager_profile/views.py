@@ -14,7 +14,8 @@ def profile_view(request):
     return render(request, "imager_profile/profile.html", {"albums": album_list})
 
 
-def user_profile_view(request):
+def user_profile_view(request, username):
     """Display profile view for any user."""
-
-    return render(request, "imager_profile/user_profile.html")
+    usr = User.objects.all().filter(username=username).first()
+    album_list = Album.published_albums.all().filter(owner__username=username)
+    return render(request, "imager_profile/user_profile.html", {"usr": usr, "albums": album_list})

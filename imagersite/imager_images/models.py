@@ -48,6 +48,10 @@ class Photo(models.Model):
 
     image = models.ImageField(upload_to="photos")
 
+    def __str__(self):
+        """Return title."""
+        return self.title
+
 
 class PublishedAlbumsManager(models.Manager):
     """Manage the set of public albums."""
@@ -96,3 +100,7 @@ class Album(models.Model):
         related_name="album",
         blank=True,
     )
+
+    def __str__(self):
+        """Return title."""
+        return self.title
