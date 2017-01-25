@@ -1,11 +1,18 @@
 from django.shortcuts import render
+from imager_images.models import Album, Photo
+from imager_profile.models import ImagerProfile
+from django.contrib.auth.models import User
+from django.conf import settings
 
 # Create your views here.
 
 
 def library_view(request):
     """Display the library view for the user."""
-    pass
+    user = request.user
+    album_list = user.owned.all()
+    photo_list = user.authored.all()
+
 
 
 def photo_gallery_view(request):
