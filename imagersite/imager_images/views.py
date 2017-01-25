@@ -12,7 +12,10 @@ def library_view(request):
     user = request.user
     album_list = user.owned.all()
     photo_list = user.authored.all()
-
+    return render(request, "imager_images/library.html", {
+            "albums": album_list,
+            "photos": photo_list}
+    )
 
 
 def photo_gallery_view(request):
