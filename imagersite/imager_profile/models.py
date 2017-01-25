@@ -69,7 +69,7 @@ class ImagerProfile(models.Model):
         decimal_places=1,
         null=True
     )
-    phone = PhoneNumberField(null=True)
+    phone = models.CharField(max_length=15, null=True)
     photography_type = models.CharField(
         max_length=255,
         choices=PHOTOGRAPHY_TYPE,
