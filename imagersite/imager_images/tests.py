@@ -120,8 +120,8 @@ class ImageTestCase(TestCase):
         )
         pic.save()
         pic.album = [test_photo_set]
-        self.assertTrue(Album.objects.first().id == 32)
-        self.assertTrue(Photo.objects.all().filter(album__id=42).first().title == pic.title)
+        self.assertTrue(Album.objects.first().id == 83)
+        self.assertTrue(Photo.objects.all().get(title="test_title").title == pic.title)
 
 
 class ImageFrontEndTestCase(TestCase):
@@ -155,24 +155,23 @@ class ImageFrontEndTestCase(TestCase):
         self.assertTrue(response.status_code == 200)
         self.assertTrue(b'Image Library' in response.content)
 
-    # def test_request_images_library_logged_in_with_pictures(self):
-    #     """Test that users pictures are rendered on the page."""
-    #     user = UserFactory.create()
-    #     self.client.force_login(user)
-    #     photos = [ImageFactory.build() for i in range(10)]
-    #     album = AlbumFactory.build()
-    #     album.owner = user
-    #     album.save()
-    #     for photo in photos:
-    #         photo.author = user
-    #         photo.image = SimpleUploadedFile(
-    #             name='test.png',
-    #             content=open(TEST_IMAGE_PATH, 'rb').read(),
-    #             content_type='image/png'
-    #         )
-    #         photo.save()
-    #         album.pictures.add(photo)
-    #     import pdb;pdb.set_trace()
+    def test_request_images_library_logged_in_with_pictures(self):
+        """Test that users pictures are rendered on the page."""
+        user = UserFactory.create()
+        self.client.force_login(user)
+        photos = [ImageFactory.build() for i in range(10)]
+        album = AlbumFactory.build()
+        album.owner = user
+        album.save()
+        for photo in photos:
+            photo.author = user
+            photo.image = SimpleUploadedFile(
+                name='test.png',
+                content=open(TEST_IMAGE_PATH, 'rb').read(),
+                content_type='image/png'
+            )
+            photo.save()
+            album.pictures.add(photo)
 
     def test_request_photo_gallery_view_uses_correct_template(self):
         """Test that the photo gallery uses the correct template."""
@@ -183,12 +182,8 @@ class ImageFrontEndTestCase(TestCase):
 
     def test_request_photo_detail_view_uses_correct_template(self):
         """Test that the photo detail view uses the correct template."""
-        user = UserFactory.create()
+        user = self.users[0]
         self.client.force_login(user)
-        photo = ImageFactory.build()
-        photo.author = user
-        user.save()
-        photo.save()
-        response = self.client.get("/images/photos/1", follow=True)
+        response = self.client.get("/images/photos/41", follow=True)
         self.assertTemplateUsed(response, "imager_images/detail.html")
         self.assertTrue(b"<img src=\"/media/photos/test_" in response.content)
