@@ -144,4 +144,15 @@ class ImageFrontEndTestCase(TestCase):
 
     def test_request_images_library_page_not_logged_in(self):
         """Test that request to library page without user returns 403."""
-        import pdb; pdb.set_trace()
+        response = self.client.get("/images/library", follow=True)
+        self.assertTrue(response.status_code == 403)
+
+    def test_requrest_images_library_logged_in(self):
+        """Test that request to library page with logged in user returns 200, page."""
+        user = UserFactory.create()
+        self.client.force_login(user)
+        response = self.client.get("/images/library", follow=True)
+        self.assertTrue(response.status_code == 200)
+        self.assertTrue(b'Image Library' in response.content)
+
+    
