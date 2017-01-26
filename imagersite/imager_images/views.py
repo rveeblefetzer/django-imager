@@ -17,6 +17,10 @@ def library_view(request):
             "photos": photo_list}
     )
 
+def public_gallery_view(request):
+    """Display all publicly published photos."""
+    photos = Photo.PublishedPhotosManager.all
+    return render(request, "imager_images/gallery.html", {"photos": photos})
 
 def photo_gallery_view(request):
     """Display the user's photo gallery view."""
