@@ -120,35 +120,42 @@ class ProfileFrontEndTests(TestCase):
     def test_can_register_new_user(self):
         """."""
         self.assertTrue(User.objects.count() == 0)
-        self.client.post("/accounts/register/",
+        self.client.post(
+            "/accounts/register/",
             {
                 "username": "joe",
                 "email": "joe@joe.joe",
                 "password1": "herewego",
                 "password2": "herewego"
-            })
+            }
+        )
         self.assertTrue(User.objects.count() == 1)
 
     def test_registered_user_is_inactive(self):
         """Test new user is inactive."""
-        self.client.post("/accounts/register/",
+        self.client.post(
+            "/accounts/register/",
             {
                 "username": "joe",
                 "email": "joe@joe.joe",
                 "password1": "herewego",
                 "password2": "herewego"
-            })
+            }
+        )
         the_user = User.objects.first()
         self.assertFalse(the_user.is_active)
 
     def register_joe(self, follow=False):
         """."""
-        response = self.client.post("/accounts/register",
+        response = self.client.post(
+            "/accounts/register",
             {
                 "username": "joe",
                 "email": "joe@joe.joe",
                 "password1": "herewego",
                 "password2": "herewego"
-            }, follow=follow)
+            },
+            follow=follow
+        )
         return response
 
