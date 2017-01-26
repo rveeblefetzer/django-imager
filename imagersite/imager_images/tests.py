@@ -127,7 +127,7 @@ class ImageTestCase(TestCase):
 class ImageFrontEndTestCase(TestCase):
     """Test Runner for the front end of the imager_images app."""
 
-    def setup(self):
+    def setUp(self):
         """Set up test users, images, and albums."""
         self.users = [UserFactory.create() for i in range(10)]
         self.images = [ImageFactory.build() for i in range(10)]
@@ -185,3 +185,10 @@ class ImageFrontEndTestCase(TestCase):
         """Test that the photo detail view uses the correct template."""
         user = UserFactory.create()
         self.client.force_login(user)
+        photo = ImageFactory.build()
+        photo.author = user
+        user.save()
+        photo.save()
+        response = self.client.get("/images/photos/1", follow=True)
+        self.assertTemplateUsed(response, "imager_images/detail.html")
+        self.assertTrue(b"<img src=\"/media/photos/test_" in response.content)
