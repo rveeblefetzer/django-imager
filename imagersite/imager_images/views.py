@@ -25,14 +25,13 @@ def library_view(request):
         )
     return HttpResponseForbidden()
 
-def public_gallery_view(request):
-    """Display all publicly published photos."""
-    photos = Photo.PublishedPhotosManager.all
-    return render(request, "imager_images/gallery.html", {"photos": photos})
 
 def photo_gallery_view(request):
     """Display the user's photo gallery view."""
-    pass
+    if request.user.is_authenticated():
+        photos = Photo.published_photos.all
+        return render(request, "imager_images/gallery.html", {"photos": photos})
+    return HttpResponseForbidden()
 
 
 def photo_detail_view(request, pk):

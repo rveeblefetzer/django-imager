@@ -147,7 +147,7 @@ class ImageFrontEndTestCase(TestCase):
         response = self.client.get("/images/library", follow=True)
         self.assertTrue(response.status_code == 403)
 
-    def test_requrest_images_library_logged_in(self):
+    def test_request_images_library_logged_in(self):
         """Test that request to library page with logged in user returns 200, page."""
         user = UserFactory.create()
         self.client.force_login(user)
@@ -155,4 +155,33 @@ class ImageFrontEndTestCase(TestCase):
         self.assertTrue(response.status_code == 200)
         self.assertTrue(b'Image Library' in response.content)
 
-    
+    # def test_request_images_library_logged_in_with_pictures(self):
+    #     """Test that users pictures are rendered on the page."""
+    #     user = UserFactory.create()
+    #     self.client.force_login(user)
+    #     photos = [ImageFactory.build() for i in range(10)]
+    #     album = AlbumFactory.build()
+    #     album.owner = user
+    #     album.save()
+    #     for photo in photos:
+    #         photo.author = user
+    #         photo.image = SimpleUploadedFile(
+    #             name='test.png',
+    #             content=open(TEST_IMAGE_PATH, 'rb').read(),
+    #             content_type='image/png'
+    #         )
+    #         photo.save()
+    #         album.pictures.add(photo)
+    #     import pdb;pdb.set_trace()
+
+    def test_request_photo_gallery_view_uses_correct_template(self):
+        """Test that the photo gallery uses the correct template."""
+        user = UserFactory.create()
+        self.client.force_login(user)
+        response = self.client.get("/images/photos", follow=True)
+        self.assertTemplateUsed(response, "imager_images/gallery.html")
+
+    def test_request_photo_detail_view_uses_correct_template(self):
+        """Test that the photo detail view uses the correct template."""
+        user = UserFactory.create()
+        self.client.force_login(user)
