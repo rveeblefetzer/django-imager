@@ -1,0 +1,7 @@
+{% extends 'imagersite/base.html' %}
+{% block body %}
+<img src="{{ album.album_cover.image.url }}">
+<h3>{{ album.album_cover.image.title }}</h3>
+<p>{{ album.album_cover.image.description }}</p>
+<p>{{ album.album_cover.image.date_uploaded }}</p>
+{% endblock %}
