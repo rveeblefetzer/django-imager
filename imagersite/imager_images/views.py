@@ -38,7 +38,7 @@ def photo_gallery_view(request):
 def photo_detail_view(request, pk):
     """Display the detail view for a single photo."""
     photo = Photo.objects.get(pk=pk)
-    return render(request, "imager_images/detail.html", {"photo": photo})
+    return render(request, "imager_images/photo_detail.html", {"photo": photo})
 
 
 def album_gallery_view(request):
@@ -46,6 +46,7 @@ def album_gallery_view(request):
     pass
 
 
-def album_detail_view(request):
+def album_detail_view(request, pk):
     """Display the detail view for a specific album."""
-    pass
+    album = Album.objects.get(pk=pk)
+    return render(request, "imager_images/album_detail.html", {"album": album})
