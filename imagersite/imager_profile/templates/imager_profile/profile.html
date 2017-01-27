@@ -8,7 +8,7 @@
     <p>Hireable: {{user.profile.hireable}}</p>
     <h5>Albums:</h5>
     <ul>
-        {% for album in albums %}
+        {% for album in user.owned.all %}
         <li>
             <a href="{% url 'imager_images:album' album.id %}">{{album.title}}</a>
         </li>

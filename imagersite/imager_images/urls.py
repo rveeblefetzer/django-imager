@@ -2,22 +2,22 @@
 
 from django.conf.urls import url
 from django.views.generic import DetailView
-from imager_images.models import Photo, Album
+from imager_images.models import Photo
 from imager_images.views import (
-    library_view,
+    LibraryView,
     PhotoGalleryView,
     AlbumGalleryView,
     album_detail_view,
-    add_photo_view,
+    AddPhotoView,
     add_album_view
 )
 
 app_name = 'imager_images'
 
 urlpatterns = [
-    url(r'^library/$', library_view, name="library"),
+    url(r'^library/$', LibraryView.as_view(), name="library"),
     url(r'^photos/$', PhotoGalleryView.as_view(), name="photos"),
-    url(r'^photos/add/$', add_photo_view, name="add_photo"),
+    url(r'^photos/add/$', AddPhotoView.as_view(), name="add_photo"),
     url(r'^photos/(?P<pk>\d+)/$', DetailView.as_view(
         model=Photo,
         template_name="imager_images/photo_detail.html",

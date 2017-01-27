@@ -1,15 +1,15 @@
 {% extends 'imagersite/base.html' %}
 {% block body %}
-    <h3>{{usr.username}}'s Profile Page</h3>
-    <p>Email: {{usr.email}}</p>
-    <p>Bio: {{usr.profile.bio}}</p>
-    <p>Website: {{usr.profile.website}}</p>
-    <p>Camera Type: {{usr.profile.camera_type}}</p>
-    <p>Hireable: {{usr.profile.hireable}}</p>
+    <h3>{{user.username}}'s Profile Page</h3>
+    <p>Email: {{user.email}}</p>
+    <p>Bio: {{user.profile.bio}}</p>
+    <p>Website: {{user.profile.website}}</p>
+    <p>Camera Type: {{user.profile.camera_type}}</p>
+    <p>Hireable: {{user.profile.hireable}}</p>
     <h5>Albums:</h5>
     {% if albums %}
     <ul>
-        {% for album in albums %}
+        {% for album in user.published_albums.all %}
         <li>
             <a href="{% url 'imager_images:album' album.id %}">{{album.title}}</a>
         </li>
