@@ -36,16 +36,20 @@ def photo_gallery_view(request):
 
 def photo_detail_view(request, pk):
     """Display the detail view for a single photo."""
-    photo = Photo.objects.get(pk=pk)
-    return render(request, "imager_images/photo_detail.html", {"photo": photo})
+    if request.user.is_authenticated():
+        photo = Photo.objects.get(pk=pk)
+        return render(request, "imager_images/photo_detail.html", {"photo": photo})
 
 
 def album_gallery_view(request):
     """Display the gallery view for the user."""
-    pass
+    if request.user.is_authenticated():
+        pass
 
 
 def album_detail_view(request, pk):
     """Display the detail view for a specific album."""
-    album = Album.objects.get(pk=pk)
-    return render(request, "imager_images/album_detail.html", {"album": album})
+    if request.user.is_authenticated():
+        album = Album.objects.get(pk=pk)
+        photos = album.pictures.all()
+        return render(request, "imager_images/album_detail.html", {"photos": photos, "album": album})
