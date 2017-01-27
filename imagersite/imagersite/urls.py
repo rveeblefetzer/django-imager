@@ -17,12 +17,12 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf.urls.static import static
 from django.conf import settings
-from imagersite.views import (home_view,
+from imagersite.views import (HomeView,
                               )
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', home_view, name="home"),
+    url(r'^$', HomeView.as_view(), name="home"),
     url(r'^', include('django.contrib.auth.urls')),
     url(r'^accounts/', include('registration.backends.hmac.urls')),
     url(r'^profile/', include('imager_profile.urls')),
