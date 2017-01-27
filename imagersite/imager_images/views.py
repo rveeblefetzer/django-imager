@@ -44,7 +44,8 @@ def photo_detail_view(request, pk):
 def album_gallery_view(request):
     """Display the gallery view for the user."""
     if request.user.is_authenticated():
-        pass
+        albums = Album.published_albums.filter(owner=request.user)
+        return render(request, "imager_images/albums.html", {"albums": albums})
 
 
 def album_detail_view(request, pk):
