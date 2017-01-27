@@ -9,7 +9,7 @@ from imager_images.views import (
     AlbumGalleryView,
     album_detail_view,
     AddPhotoView,
-    add_album_view
+    AddAlbumView
 )
 
 app_name = 'imager_images'
@@ -24,6 +24,6 @@ urlpatterns = [
         context_object_name="photo"
     ), name="photo"),
     url(r'^albums/$', AlbumGalleryView.as_view(), name="albums"),
-    url(r'^albums/add/$', add_album_view, name="add_album"),
+    url(r'^albums/add/$', AddAlbumView.as_view(), name="add_album"),
     url(r'^albums/(?P<pk>\d+)/$', album_detail_view, name="album")
 ]
