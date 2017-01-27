@@ -1,12 +1,9 @@
-from django.contrib.auth.models import User
-from django.conf import settings
-from django.http import HttpResponseForbidden
-from django.shortcuts import render
+
+from django.shortcuts import render, redirect
 from django.views.generic import ListView, TemplateView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from imager_images.models import Album, Photo
-from imager_profile.models import ImagerProfile
 
 
 # Create your views here.
@@ -52,22 +49,38 @@ def album_detail_view(request, pk):
 
 
 class AddPhotoView(LoginRequiredMixin, CreateView):
-    """."""
+    """Add a Photo object to the user's account."""
 
     login_url = reverse_lazy("login")
     template_name = "imager_images/add_photo.html"
     model = Photo
     fields = [
-        "title", "description", "published", "date_published", "author", "image"
+        "title", "description", "published", "date_published", "image"
     ]
-    redirect_url = reverse_lazy("library")
+
+    def form_valid(self, form):
+        """Force the form to use the current user as the author."""
+        form.instance.author = self.request.user
+        photo = form.save()
+        photo.author = self.request.user
+        photo.save()
+        return redirect("/images/library/")
 
 
-def add_photo_view(request):
-    """."""
-    pass
+class AddAlbumView(LoginRequiredMixin, CreateView):
+    """Add an Album object to the User's account."""
 
+    login_url = reverse_lazy("login")
+    template_name = "imager_images/add_album.html"
+    model = Album
+    fields = [
+        "title", "description", "album_cover", "published", "date_published", "pictures"
+    ]
 
-def add_album_view(request):
-    """."""
-    pass
+    def form_valid(self, form):
+        """Force the form to use the current user as the author."""
+        form.instance.owner = self.request.user
+        album = form.save()
+        album.owner = self.request.user
+        album.save()
+        return redirect("/images/library/")
