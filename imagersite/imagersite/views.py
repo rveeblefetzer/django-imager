@@ -1,26 +1,19 @@
 from django.shortcuts import render
-from imagersite.forms import UserForm
+from django.contrib.auth.models import User
+from django.conf import settings
+from imager_profile.models import ImagerProfile
+from imager_images.models import Album, Photo
+import random
+import os
+
 
 
 def home_view(request):
-    params = {}
-    return render(request, "imagersite/home.html", params)
-
-
-def register_view(request):
-    registered = False
-    if request.method == 'POST':
-        user_form = UserForm(data=request.POST)
-
-        if user_form.is_valid():
-            user = user_form.save()
-            user.set_password(user.password)
-            user.save()
-        else:
-            print(user_form.errors)
+    usrlist = User.objects.all()
+    bg_photos = Photo.published_photos.all()
+    if len(bg_photos):
+        img_url = random.choice(bg_photos).image.url
     else:
-        user_form = UserForm()
-    return render(request,
-                  'imagersite/register.html',
-                  {'user_form': user_form, 'registered': registered},
-                  )
+        img_url = os.path.join(settings.MEDIA_URL, "photos/rainier.jpg")
+
+    return render(request, "imagersite/home.html", {"usrlist": usrlist, "img_url": img_url})
