@@ -120,7 +120,6 @@ class ImageTestCase(TestCase):
         )
         pic.save()
         pic.album = [test_photo_set]
-        self.assertTrue(Album.objects.first().id == 83)
         self.assertTrue(Photo.objects.all().get(title="test_title").title == pic.title)
 
 
@@ -184,6 +183,18 @@ class ImageFrontEndTestCase(TestCase):
         """Test that the photo detail view uses the correct template."""
         user = self.users[0]
         self.client.force_login(user)
-        response = self.client.get("/images/photos/41", follow=True)
-        self.assertTemplateUsed(response, "imager_images/detail.html")
+        photo_id = self.images[0].id
+        url = "/images/photos/" + str(photo_id)
+        response = self.client.get(url, follow=True)
+        self.assertTemplateUsed(response, "imager_images/photo_detail.html")
         self.assertTrue(b"<img src=\"/media/photos/test_" in response.content)
+
+    def test_request_album_detail_view_renders_photo_list(self):
+        """Test that the album detail view renders a list of photos."""
+        user = self.users[0]
+        self.client.force_login(user)
+        album_id = self.albums[0].id
+        url = "/images/albums/" + str(album_id)
+        response = self.client.get(url, follow=True)
+        self.assertTemplateUsed(response, "imager_images/album_detail.html")
+        self.assertTrue(b"class=\"thumbList\"" in response.content)
