@@ -25,6 +25,23 @@ class ProfileTestCase(TestCase):
         """Test that an imager profile is made when user is saved."""
         self.assertTrue(ImagerProfile.objects.count() == 20)
 
+    def test_all_profile_fields(self):
+        """Test that a profile can be created with all profile fields."""
+        test_user = self.users[0]
+        test_user.profile.camera_type = "fuji"
+        test_user.profile.address = "Some place."
+        test_user.profile.bio = "Bio info here."
+        test_user.profile.personal_website = "http://www.awebsite.com"
+        test_user.profile.phone = "(360) 550-3355"
+        test_user.profile.photography_type = "sports"
+        test_user.save()
+        self.assertTrue(test_user.profile.camera_type == "fuji")
+        self.assertTrue(test_user.profile.address == "Some place.")
+        self.assertTrue(test_user.profile.bio == "Bio info here.")
+        self.assertTrue(test_user.profile.personal_website == "http://www.awebsite.com")
+        self.assertTrue(test_user.profile.phone == "(360) 550-3355")
+        self.assertTrue(test_user.profile.photography_type == "sports")
+
     def test_profile_is_associated_with_actual_users(self):
         """Test profile is associated with user objects."""
         profile = ImagerProfile.objects.first()
@@ -103,35 +120,42 @@ class ProfileFrontEndTests(TestCase):
     def test_can_register_new_user(self):
         """."""
         self.assertTrue(User.objects.count() == 0)
-        self.client.post("/accounts/register/",
+        self.client.post(
+            "/accounts/register/",
             {
                 "username": "joe",
                 "email": "joe@joe.joe",
                 "password1": "herewego",
                 "password2": "herewego"
-            })
+            }
+        )
         self.assertTrue(User.objects.count() == 1)
 
     def test_registered_user_is_inactive(self):
         """Test new user is inactive."""
-        self.client.post("/accounts/register/",
+        self.client.post(
+            "/accounts/register/",
             {
                 "username": "joe",
                 "email": "joe@joe.joe",
                 "password1": "herewego",
                 "password2": "herewego"
-            })
+            }
+        )
         the_user = User.objects.first()
         self.assertFalse(the_user.is_active)
 
     def register_joe(self, follow=False):
         """."""
-        response = self.client.post("/accounts/register",
+        response = self.client.post(
+            "/accounts/register",
             {
                 "username": "joe",
                 "email": "joe@joe.joe",
                 "password1": "herewego",
                 "password2": "herewego"
-            }, follow=follow)
+            },
+            follow=follow
+        )
         return response
 

@@ -1,0 +1,17 @@
+{% extends 'imagersite/base.html' %}
+{% block body %}
+    <h3>{{user.username}}'s Profile Page</h3>
+    <p>Email: {{user.email}}</p>
+    <p>Bio: {{user.profile.bio}}</p>
+    <p>Website: {{user.profile.website}}</p>
+    <p>Camera Type: {{user.profile.camera_type}}</p>
+    <p>Hireable: {{user.profile.hireable}}</p>
+    <h5>Albums:</h5>
+    <ul>
+        {% for album in albums %}
+        <li>
+            <a href="{% url 'imager_images:album' album.id %}">{{album.title}}</a>
+        </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

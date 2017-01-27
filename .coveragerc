@@ -1,3 +1,0 @@
-[run]
-source = expense_tracker
-omit = expense_tracker/test*

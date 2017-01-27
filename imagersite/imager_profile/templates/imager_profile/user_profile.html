@@ -1,0 +1,21 @@
+{% extends 'imagersite/base.html' %}
+{% block body %}
+    <h3>{{usr.username}}'s Profile Page</h3>
+    <p>Email: {{usr.email}}</p>
+    <p>Bio: {{usr.profile.bio}}</p>
+    <p>Website: {{usr.profile.website}}</p>
+    <p>Camera Type: {{usr.profile.camera_type}}</p>
+    <p>Hireable: {{usr.profile.hireable}}</p>
+    <h5>Albums:</h5>
+    {% if albums %}
+    <ul>
+        {% for album in albums %}
+        <li>
+            <a href="{% url 'imager_images:album' album.id %}">{{album.title}}</a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p> This user has no published albums. </p>
+    {% endif %}
+{% endblock %}
