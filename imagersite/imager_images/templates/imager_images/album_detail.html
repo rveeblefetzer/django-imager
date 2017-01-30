@@ -2,8 +2,9 @@
 {% load thumbnail %}
 {% block body %}
     <h5>Images from {{ album.title }}</h5>
+    <img src="{{ album.album_cover.image.url }}">
     <ul class="thumbList">
-        {% for photo in photos %}
+        {% for photo in album.pictures.all %}
         <li>
             {% thumbnail photo.image "100x100" crop="center" as im %}
                 <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
