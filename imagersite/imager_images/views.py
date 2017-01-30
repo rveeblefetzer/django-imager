@@ -1,5 +1,5 @@
 
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.views.generic import ListView, TemplateView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
@@ -38,14 +38,6 @@ class AlbumGalleryView(ListView):
     def get_queryset(self):
         """Modify get_queryset to return list of published albums for specific user."""
         return Album.published_albums.filter(owner=self.request.user)
-
-
-def album_detail_view(request, pk):
-    """Display the detail view for a specific album."""
-    if request.user.is_authenticated():
-        album = Album.objects.get(pk=pk)
-        photos = album.pictures.all()
-        return render(request, "imager_images/album_detail.html", {"photos": photos, "album": album})
 
 
 class AddPhotoView(LoginRequiredMixin, CreateView):
