@@ -8,7 +8,9 @@ from imager_images.views import (
     PhotoGalleryView,
     AlbumGalleryView,
     AddPhotoView,
-    AddAlbumView
+    AddAlbumView,
+    EditAlbumView,
+    EditPhotoView
 )
 
 app_name = 'imager_images'
@@ -22,11 +24,13 @@ urlpatterns = [
         template_name="imager_images/photo_detail.html",
         context_object_name="photo"
     ), name="photo"),
+    url(r'^photos/(?P<pk>\d+)/edit/$', EditPhotoView.as_view(), name="edit_photo"),
     url(r'^albums/$', AlbumGalleryView.as_view(), name="albums"),
     url(r'^albums/add/$', AddAlbumView.as_view(), name="add_album"),
     url(r'^albums/(?P<pk>\d+)/$', DetailView.as_view(
         model=Album,
         template_name="imager_images/album_detail.html",
         context_object_name="album"
-    ), name="album")
+    ), name="album"),
+    url(r'^albums/(?P<pk>\d+)/edit/$', EditAlbumView.as_view(), name="edit_album")
 ]

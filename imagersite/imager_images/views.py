@@ -1,6 +1,7 @@
 
 from django.shortcuts import redirect
 from django.views.generic import ListView, TemplateView, CreateView
+from django.views.generic.edit import UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from imager_images.models import Album, Photo
@@ -64,6 +65,44 @@ class AddAlbumView(LoginRequiredMixin, CreateView):
 
     login_url = reverse_lazy("login")
     template_name = "imager_images/add_album.html"
+    model = Album
+    fields = [
+        "title", "description", "album_cover", "published", "date_published", "pictures"
+    ]
+
+    def form_valid(self, form):
+        """Force the form to use the current user as the author."""
+        form.instance.owner = self.request.user
+        album = form.save()
+        album.owner = self.request.user
+        album.save()
+        return redirect("/images/library/")
+
+
+class EditPhotoView(LoginRequiredMixin, UpdateView):
+    """Define a view handler for editing photos."""
+
+    login_url = reverse_lazy("login")
+    template_name = "imager_images/edit_photo.html"
+    model = Photo
+    fields = [
+        "title", "description", "published", "date_published", "image"
+    ]
+
+    def form_valid(self, form):
+        """Force the form to use the current user as the author."""
+        form.instance.author = self.request.user
+        photo = form.save()
+        photo.author = self.request.user
+        photo.save()
+        return redirect("/images/library/")
+
+
+class EditAlbumView(LoginRequiredMixin, UpdateView):
+    """Define a view handler for editing albums."""
+
+    login_url = reverse_lazy("login")
+    template_name = "imager_images/edit_album.html"
     model = Album
     fields = [
         "title", "description", "album_cover", "published", "date_published", "pictures"
