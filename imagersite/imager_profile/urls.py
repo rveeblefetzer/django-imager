@@ -7,6 +7,6 @@ from . import views
 app_name = 'imager_profile'
 
 urlpatterns = [
-    url(r'^$', views.profile_view, name="profile"),
-    url(r'^profile/(?P<username>[\w.@+-]+)/$', views.user_profile_view, name="user_profile")
+    url(r'^$', views.ProfileView.as_view(), name="profile"),
+    url(r'^(?P<username>[\w.@+-]+)/$', views.UserProfileView.as_view(), name="user_profile")
 ]
