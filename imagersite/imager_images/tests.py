@@ -6,6 +6,7 @@ import factory
 import os
 from faker import Faker
 import datetime
+from django.urls import reverse_lazy
 
 
 fake = Faker()
@@ -144,7 +145,7 @@ class ImageFrontEndTestCase(TestCase):
     def test_request_images_library_page_not_logged_in(self):
         """Test that request to library page without user returns 403."""
         response = self.client.get("/images/library", follow=True)
-        self.assertTrue(response.status_code == 403)
+        self.assertTrue(response.status_code, 403)
 
     def test_request_images_library_logged_in(self):
         """Test that request to library page with logged in user returns 200, page."""
@@ -198,3 +199,13 @@ class ImageFrontEndTestCase(TestCase):
         response = self.client.get(url, follow=True)
         self.assertTemplateUsed(response, "imager_images/album_detail.html")
         self.assertTrue(b"class=\"thumbList\"" in response.content)
+
+    # def test_logged_in_user_sees_private_data(self):
+    #     """Test that a logged in user can see their own private data."""
+    #     user = User()
+    #     user.username = "octocat"
+    #     user.set_password('gittothehub')
+    #     user.save()
+    #     self.client.force_login(user)
+    #     response = self.client.get(reverse_lazy('home'))
+    #     self.assertTrue(Photo.objects.filter('private') in str(response.content))

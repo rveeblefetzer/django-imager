@@ -2,8 +2,9 @@ from django.test import TestCase, Client, RequestFactory
 from django.contrib.auth.models import User
 from imager_profile.models import ImagerProfile
 import factory
-
-# Create your tests here.
+import unittest
+from django.test import RequestFactory
+from django.urls import reverse_lazy
 
 
 class ProfileTestCase(TestCase):
@@ -71,7 +72,7 @@ class ProfileTestCase(TestCase):
 
 
 class ProfileFrontEndTests(TestCase):
-    """Test hte profile Front end."""
+    """Test the profile front end."""
     class UserFactory(factory.django.DjangoModelFactory):
         class Meta:
             model = User
@@ -82,31 +83,44 @@ class ProfileFrontEndTests(TestCase):
         )
 
     def setUp(self):
-        """."""
+        """Set up the tests."""
         self.client = Client()
         self.request = RequestFactory()
 
     def test_home_view_status_ok(self):
-        """."""
+        """Test that HomeView class-based view gets 200 status code."""
         from imagersite.views import HomeView
-        # req = self.request.get("/potato")
-        import pdb; pdb.set_trace()
-        response = HomeView()
-        self.assertTrue(response.status_code == 200)
+        req = self.request.get(reverse_lazy('home'))
+        view = HomeView.as_view()
+        response = view(req)
+        self.assertEqual(response.status_code, 200)
 
-    def test_home_route_is_status_ok(self):
-        """."""
-        response = self.client.get("/")
-        self.assertTrue(response.status_code == 200)
+    # def test_home_route_is_status_ok(self):
+    #     """I wish I knew how to say why this is the same but different from preceding."""
+    #     response = self.client.get("/")
+    #     self.assertTrue(response.status_code == 200)
 
-    def test_route_uses_right_templates(self):
-        """."""
+    def test_home_route_uses_right_templates(self):
+        """Test that HomeView uses expected templates."""
         response = self.client.get("/")
         self.assertTemplateUsed(response, "imagersite/home.html")
         self.assertTemplateUsed(response, "imagersite/base.html")
 
+    def test_login_view_status(self):
+        """Test that login view returns 200 status code."""
+        from django.contrib.auth.views import login
+        req = self.request.get(reverse_lazy('home'))
+        response = login(req)
+        self.assertEqual(response.status_code, 200)
+
+    def test_login_route_uses_right_template(self):
+        """Test that the login view uses expected templates."""
+        response = self.client.get(reverse_lazy('login'))
+        self.assertTemplateUsed(response, 'registration/login.html')
+        self.assertTemplateUsed(response, 'imagersite/base.html')
+
     def test_login_route_redirects(self):
-        """."""
+        """Test that logging in returns user to home."""
         new_user = self.UserFactory.create()
         new_user.username = "dave"
         new_user.set_password("tugboats")
@@ -117,6 +131,16 @@ class ProfileFrontEndTests(TestCase):
         }, follow=True)
         self.assertTrue(response.status_code == 200)
         self.assertTrue(response.redirect_chain[0][0] == "/")
+
+    
+
+    def test_register_view_status(self):
+        """Test register view status code is 200."""
+        from registration.backends.hmac.views import RegistrationView
+        req = self.request.get(reverse_lazy('home'))
+        reg_view = RegistrationView.as_view()
+        response = reg_view(req)
+        self.assertEqual(response.status_code, 200)
 
     def test_can_register_new_user(self):
         """."""
