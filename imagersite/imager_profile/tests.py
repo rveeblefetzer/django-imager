@@ -132,6 +132,8 @@ class ProfileFrontEndTests(TestCase):
         self.assertTrue(response.status_code == 200)
         self.assertTrue(response.redirect_chain[0][0] == "/")
 
+    
+
     def test_register_view_status(self):
         """Test register view status code is 200."""
         from registration.backends.hmac.views import RegistrationView
