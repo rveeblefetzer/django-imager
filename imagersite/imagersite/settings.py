@@ -21,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY', '')
 # SESSION_COOKIE_SECURE = True
-FILE_UPLOAD_PERMISSIONS = 0644
+# FILE_UPLOAD_PERMISSIONS = 0644
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -89,7 +89,7 @@ DATABASES = {
         'NAME': os.environ.get("IMAGER_DB", "imager_db"),
         'USER': os.environ.get("DB_USERNAME", ""),
         'PASSWORD': os.environ.get("DB_PASSWORD", ""),
-        'HOST': '127.0.0.1',
+        'HOST': os.environ.get("DB_ENDPOINT", ""),
         'PORT': '5432',
         'TEST': {
             'NAME': os.environ.get("TEST_IMAGER_DB", "test_imager_db2")
