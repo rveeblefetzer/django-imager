@@ -6,6 +6,12 @@
     <p>Website: {{user.profile.website}}</p>
     <p>Camera Type: {{user.profile.camera_type}}</p>
     <p>Hireable: {{user.profile.hireable}}</p>
+    <h5>Profile Options</h5>
+    <h6>
+        <a href="{% url 'imager_profile:edit_profile' %}">Edit Profile</a> | 
+        <a href="{% url 'imager_images:add_album' %}">Add Album</a> | 
+        <a href="{% url 'imager_images:add_photo' %}">Add Photo</a>
+    </h6>
     <h5>Albums:</h5>
     <ul>
         {% for album in user.owned.all %}
