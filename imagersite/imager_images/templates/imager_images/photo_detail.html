@@ -4,4 +4,5 @@
 <h3>{{ photo.title }}</h3>
 <p>{{ photo.description }}</p>
 <p>{{ photo.date_uploaded }}</p>
+<p><a href="{% url 'imager_images:edit_photo' photo.id %}">Edit title/description</a>
 {% endblock %}
