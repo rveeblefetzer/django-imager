@@ -1,14 +1,13 @@
 [run]
-source = 
-    imagersite
-    imager_profile
-    imager_images
-omit = 
-    */migrations/*
+omit =
+    */migrations/*,
     */tests.py
     manage.py
-    imagersite/wsgi.py
-    */apps.py
+    lending_library/wsgi.py
+
+source =
+    lending_library
+    patron_profile
 
 [report]
 show_missing = True
