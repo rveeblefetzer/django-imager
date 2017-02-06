@@ -3,6 +3,13 @@
 <img src="{{ photo.image.url }}">
 <h3>{{ photo.title }}</h3>
 <p>{{ photo.description }}</p>
+{% if photo.tags.count %}
+    <p><strong>Tags:</strong>
+    {% for tag in photo.tags.all %}
+        <a href="{% url 'imager_images:tagged_photos' tag.slug %}">{{ tag }}</a>
+    {% endfor %}
+<p>
+{% endif %}
 <p>{{ photo.date_uploaded }}</p>
 <p><a href="{% url 'imager_images:edit_photo' photo.id %}">Edit title/description</a>
 {% endblock %}

@@ -1,5 +1,5 @@
 
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.views.generic import ListView, TemplateView, CreateView
 from django.views.generic.edit import UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -48,7 +48,8 @@ class AddPhotoView(LoginRequiredMixin, CreateView):
     template_name = "imager_images/add_photo.html"
     model = Photo
     fields = [
-        "title", "description", "published", "date_published", "image"
+        "title", "description", "published", "date_published", "image",
+        "tags"
     ]
 
     def form_valid(self, form):
@@ -86,7 +87,8 @@ class EditPhotoView(LoginRequiredMixin, UpdateView):
     template_name = "imager_images/edit_photo.html"
     model = Photo
     fields = [
-        "title", "description", "published", "date_published", "image"
+        "title", "description", "published", "date_published", "image",
+        "tags"
     ]
 
     def form_valid(self, form):
@@ -115,3 +117,22 @@ class EditAlbumView(LoginRequiredMixin, UpdateView):
         album.owner = self.request.user
         album.save()
         return redirect("/images/library/")
+
+
+class ProfileTagView(ListView):
+    template_name = "imager_images/profile_tag_list.html"
+    slug_field_name = "tag"
+    context_object_name = "photos"
+
+    def get_queryset(self):
+        return Photo.objects.filter(tags__slug=self.kwargs.get("tag")).all()
+
+    # def get_context_data(self, **kwargs):
+    #     context = super(ProfileTagView, self).get_context_data(**kwargs)
+    #     context["tag"] = self.kwargs.get("tag")
+    #     return context
+
+    def get_context_data(self):
+        """Extending get_context_data method to add our data."""
+        photos = Photo.objects.filter(tags__slug="tag").all()
+        return {'photos': photos}

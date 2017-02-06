@@ -11,7 +11,7 @@ from imager_images.views import (
     AddAlbumView,
     EditAlbumView,
     EditPhotoView,
-    TagListView
+    ProfileTagView,
 )
 
 app_name = 'imager_images'
@@ -33,6 +33,6 @@ urlpatterns = [
         template_name="imager_images/album_detail.html",
         context_object_name="album"
     ), name="album"),
-    url(r'^albums/(?P<pk>\d+)/edit/$', EditAlbumView.as_view(), name="edit_album")
-    url(r'^tagged/(?P<slug>[-\w]+)/$', TagListView.as_view(), name="tagged_photos"),
+    url(r'^albums/(?P<pk>\d+)/edit/$', EditAlbumView.as_view(), name="edit_album"),
+    url(r'^tagged/(?P<slug>[-\w]+)/$', ProfileTagView.as_view(), name="tagged_photos"),
 ]

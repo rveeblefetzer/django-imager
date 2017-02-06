@@ -46,7 +46,7 @@ class Photo(models.Model):
         related_name="authored",
     )
     tags = TaggableManager()
-    
+
     image = models.ImageField(upload_to="photos")
 
     def __str__(self):
