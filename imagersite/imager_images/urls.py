@@ -10,7 +10,8 @@ from imager_images.views import (
     AddPhotoView,
     AddAlbumView,
     EditAlbumView,
-    EditPhotoView
+    EditPhotoView,
+    TagListView
 )
 
 app_name = 'imager_images'
@@ -33,4 +34,5 @@ urlpatterns = [
         context_object_name="album"
     ), name="album"),
     url(r'^albums/(?P<pk>\d+)/edit/$', EditAlbumView.as_view(), name="edit_album")
+    url(r'^tagged/(?P<slug>[-\w]+)/$', TagListView.as_view(), name="tagged_photos"),
 ]

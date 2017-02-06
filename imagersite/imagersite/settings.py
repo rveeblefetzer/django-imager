@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'imager_profile',
     'imagersite',
     'imager_images',
-    'sorl.thumbnail'
+    'sorl.thumbnail',
+    'taggit'
 ]
 
 MIDDLEWARE = [
@@ -133,3 +134,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'MEDIA')
 MEDIA_URL = "/media/"
 ACCOUNT_ACTIVATION_DAYS = 3
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Make tags case-insensitive for searching
+TAGGIT_CASE_INSENSITIVE = True
