@@ -120,20 +120,24 @@ class EditAlbumView(LoginRequiredMixin, UpdateView):
 
 
 class ProfileTagView(ListView):
-    template_name = "imager_images/library.html"
-    # slug = "tag"
-    # context_object_name = "photos"
+    """Class-based view for user's images with specific tag."""
+    template_name = "imager_images/profile_tag_list.html"
+    slug = "tag"
+    context_object_name = "photos"
 
     # def get_queryset(self):
     #     return Photo.objects.filter(tags__slug=self.kwargs.get("tag")).all()
 
-    # # def get_context_data(self, **kwargs):
-    # #     context = super(ProfileTagView, self).get_context_data(**kwargs)
-    # #     context["tag"] = self.kwargs.get("tag")
-    # #     return context
     def get_queryset(self):
-        """Get public photos."""
-        return Photo.objects.filter(tags__slug="tag").all()
+        """Get tagged photos."""
+        # return Photo.objects.filter(published="public").filter(tags__slug="tag").all()
+        return Photo.objects.filter(tags__slug=self.kwargs.get("tag")).all()
+
+    def get_context_data(self, **kwargs):
+        context = super(ProfileTagView, self).get_context_data(**kwargs)
+        context["tag"] = self.kwargs.get("tag")
+        return context
+
 
     # def get_context_data(self):
     #     """Extending get_context_data method to add our data."""
@@ -142,11 +146,11 @@ class ProfileTagView(ListView):
 
 
 class AllPublicPhotosList(ListView):
-    """Class based view for Photo list."""
+    """Class-based view all public photos."""
     template_name = "imager_images/public_photos.html"
 
     def get_queryset(self):
-        """Get public photos."""
+        """Get all public photos."""
         return Photo.objects.filter(published="public")
 
     def get_context_data(self):
