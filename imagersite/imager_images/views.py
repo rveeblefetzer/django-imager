@@ -131,11 +131,14 @@ class ProfileTagView(ListView):
     # #     context = super(ProfileTagView, self).get_context_data(**kwargs)
     # #     context["tag"] = self.kwargs.get("tag")
     # #     return context
+    def get_queryset(self):
+        """Get public photos."""
+        return Photo.objects.filter(tags__slug="tag").all()
 
-    def get_context_data(self):
-        """Extending get_context_data method to add our data."""
-        photos = Photo.objects.filter(tags__slug="tag").all()
-        return {'photos': photos}
+    # def get_context_data(self):
+    #     """Extending get_context_data method to add our data."""
+    #     photos = Photo.objects.filter(tags__slug="tag").all()
+    #     return {'photos': photos}
 
 
 class AllPublicPhotosList(ListView):
