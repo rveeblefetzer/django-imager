@@ -17,3 +17,16 @@ body {
 .thumbList {
     list-style: none;
 }
+.thumbList li{
+  display: inline-block;
+  margin: 20px;
+}
+
+.thumbList li img{
+
+}
+
+.thumbList li a{
+  display: block;
+  text-align: center;
+}
