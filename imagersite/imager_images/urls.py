@@ -12,6 +12,7 @@ from imager_images.views import (
     EditAlbumView,
     EditPhotoView,
     ProfileTagView,
+    AllPublicPhotosList
 )
 
 app_name = 'imager_images'
@@ -35,4 +36,6 @@ urlpatterns = [
     ), name="album"),
     url(r'^albums/(?P<pk>\d+)/edit/$', EditAlbumView.as_view(), name="edit_album"),
     url(r'^tagged/(?P<slug>[-\w]+)/$', ProfileTagView.as_view(), name="tagged_photos"),
+    url(r'^public_photos/$', AllPublicPhotosList.as_view(), name='public_photos'),
+
 ]

@@ -6,7 +6,7 @@
 {% if photo.tags.count %}
     <p><strong>Tags:</strong>
     {% for tag in photo.tags.all %}
-        <a href="{% url 'imager_images:tagged_photos' tag.slug %}">{{ tag }}</a>
+        <a href="{% url 'imager_images:tagged_photos' slug=tag %}">{{ tag }}</a>
     {% endfor %}
 <p>
 {% endif %}

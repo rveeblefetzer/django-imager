@@ -27,7 +27,7 @@
     </ul>
     <h5>Tags:</h5>
     <p>
-    {% for photo.tags in photos %}
-    <a href="{% url 'imager_images:profile_tag_list' photo.tags %}">{{ tag }}</a>
+    {% for tag in photo.tags.all %}
+        <a href="{% url 'imager_images:tagged_photos' slug=tag %}">{{ tag }}</a>
     {% endfor %}
 {% endblock %}

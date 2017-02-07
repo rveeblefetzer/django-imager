@@ -2,7 +2,7 @@
 {% load thumbnail %}
 {% block body %}
     <h3>{{user.username}}</h3>
-    <h5>Images tagged {{ tag }}</h5>
+    <h5>Images tagged "{{ tag }}"</h5>
     <ul class="thumbList">
         {% for photo in photos %}
         <li>
