@@ -13,6 +13,11 @@
         {% endfor %}
         </li>
     </ul>
+    <br>
+    <h4>Tag in this Album:</h4>
+    {% for tag in tags %}
+        <a href="{% url 'imager_images:tagged_photos' tag.name %}">{{ tag.name }}</a>  
+    {% endfor %}
 {% endblock %}
 
 

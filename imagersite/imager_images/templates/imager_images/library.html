@@ -24,7 +24,17 @@
 
             <a href="{% url 'imager_images:photo' photo.id %}">{{photo.title}}</a>
             <a href="{% url 'imager_images:edit_photo' photo.id %}">Edit Photo</a>
+            {% for tag in photo.tags.all %}
+            Tags:
+               <a class="tagLink" href="{% url 'imager_images:tagged_photos' tag %}">{{ tag }}</a> 
+            {% endfor %}
         {% endfor %}
         </li>
     </ul>
+    <h5>Tags:</h5>
+    <p>
+        {% for tag in tags %}
+            <a href="{% url 'imager_images:tagged_photos' tag.name %}">{{ tag.name }}</a>
+        {% endfor %}
+    </p>
 {% endblock %}

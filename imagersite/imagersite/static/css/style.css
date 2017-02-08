@@ -20,6 +20,7 @@ body {
 .thumbList li{
   display: inline-block;
   margin: 20px;
+  vertical-align: top;
 }
 
 .thumbList li img{
@@ -28,5 +29,10 @@ body {
 
 .thumbList li a{
   display: block;
+  text-align: center;
+}
+
+.thumbList li a.tagLink {
+  display: inline;
   text-align: center;
 }
