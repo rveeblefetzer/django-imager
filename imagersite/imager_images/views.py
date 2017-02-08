@@ -1,6 +1,6 @@
 
-from django.shortcuts import redirect, render
-from django.views.generic import ListView, TemplateView, CreateView
+from django.shortcuts import redirect
+from django.views.generic import DetailView, ListView, TemplateView, CreateView
 from django.views.generic.edit import UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
@@ -19,7 +19,8 @@ class LibraryView(LoginRequiredMixin, TemplateView):
         user = self.request.user
         album_list = user.owned.all()
         photo_list = user.authored.all()
-        return {"albums": album_list, "photos": photo_list}
+        tag_list = Photo.tags.all()
+        return {"albums": album_list, "photos": photo_list, "tags": tag_list}
 
 
 class PhotoGalleryView(ListView):
@@ -41,6 +42,23 @@ class AlbumGalleryView(ListView):
         return Album.published_albums.filter(owner=self.request.user)
 
 
+class DetailPhotoView(DetailView):
+    """Define a view to handle the photo details."""
+    model = Photo
+    template_name = "imager_images/photo_detail.html"
+
+    def get_context_data(self, **kwargs):
+        """Overwrite get_context_data method to return additional info."""
+        photo = Photo.objects.get(id=self.kwargs.get("pk"))
+        similar_photos = Photo.published_photos.filter(
+            tags__in=photo.tags.all()
+        ).exclude(
+            id=self.kwargs.get("pk")
+        ).distinct()
+
+        return {"similar_photos": similar_photos[:4], "photo": photo}
+
+
 class AddPhotoView(LoginRequiredMixin, CreateView):
     """Add a Photo object to the user's account."""
 
@@ -59,6 +77,23 @@ class AddPhotoView(LoginRequiredMixin, CreateView):
         photo.author = self.request.user
         photo.save()
         return redirect("/images/library/")
+
+
+class AlbumDetailView(DetailView):
+    """Define a view to handle the photo details."""
+    model = Album
+    template_name = "imager_images/album_detail.html"
+
+    def get_context_data(self, **kwargs):
+        """Overwrite get_context_data method to return additional info."""
+        album = Album.objects.get(id=self.kwargs.get("pk"))
+        photos = album.pictures.all()
+        tag_set = set()
+        for photo in photos:
+            for tag in photo.tags.all():
+                tag_set.add(tag)
+
+        return {"tags": tag_set, "album": album}
 
 
 class AddAlbumView(LoginRequiredMixin, CreateView):
@@ -122,27 +157,16 @@ class EditAlbumView(LoginRequiredMixin, UpdateView):
 class ProfileTagView(ListView):
     """Class-based view for user's images with specific tag."""
     template_name = "imager_images/profile_tag_list.html"
-    slug = "tag"
     context_object_name = "photos"
-
-    # def get_queryset(self):
-    #     return Photo.objects.filter(tags__slug=self.kwargs.get("tag")).all()
 
     def get_queryset(self):
         """Get tagged photos."""
-        # return Photo.objects.filter(published="public").filter(tags__slug="tag").all()
-        return Photo.objects.filter(tags__slug=self.kwargs.get("tag")).all()
+        return Photo.objects.filter(tags__slug=self.kwargs.get("slug")).all()
 
     def get_context_data(self, **kwargs):
         context = super(ProfileTagView, self).get_context_data(**kwargs)
-        context["tag"] = self.kwargs.get("tag")
+        context["tag"] = self.kwargs.get("slug")
         return context
-
-
-    # def get_context_data(self):
-    #     """Extending get_context_data method to add our data."""
-    #     photos = Photo.objects.filter(tags__slug="tag").all()
-    #     return {'photos': photos}
 
 
 class AllPublicPhotosList(ListView):
@@ -154,7 +178,6 @@ class AllPublicPhotosList(ListView):
         return Photo.objects.filter(published="public")
 
     def get_context_data(self):
-        user = self.request.user
         album_list = Album.objects.filter(published="public")
         photo_list = Photo.objects.filter(published="public")
         return {"albums": album_list, "photos": photo_list}
