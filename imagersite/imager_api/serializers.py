@@ -16,9 +16,9 @@ class PhotoSerializer(serializers.HyperlinkedModelSerializer):
 
 class AlbumSerializer(serializers.HyperlinkedModelSerializer):
     """Define serializer for album data."""
-    pictures = serializers.HyperlinkedIdentityField(view_name='album_photo_list', lookup_field='pk')
+
     owner = serializers.ReadOnlyField(source='owner.username')
 
     class Meta:
         model = Album
-        fields = ('title', 'description', 'date_created', 'published', 'owner', 'album_cover', 'pictures')
+        fields = ('title', 'description', 'date_created', 'published', 'owner', 'album_cover')

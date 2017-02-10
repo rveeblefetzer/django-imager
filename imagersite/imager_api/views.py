@@ -21,13 +21,18 @@ class APIUserPhotoListView(mixins.ListModelMixin, generics.GenericAPIView):
         return self.list(request, *args, **kwargs)
 
 
-class APIAlbumDetailView(mixins.RetrieveModelMixin, generics.GenericAPIView):
+class APIUserAlbumListView(mixins.ListModelMixin, generics.GenericAPIView):
     """Define a view to return details for a specific album."""
-    queryset = Album.objects.all()
     serializer_class = AlbumSerializer
 
+    def get_queryset(self):
+        """Rewrite queryset to return list of albums for single user."""
+        user = User.objects.get(username=self.kwargs["username"])
+        albums = user.owned.filter(published="public")
+        return albums
+
     def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
+        return self.list(request, *args, **kwargs)
 
 
 class APIAlbumPhotosView(mixins.ListModelMixin, generics.GenericAPIView):
