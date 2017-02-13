@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', HomeView.as_view(), name="home"),
     url(r'^', include('django.contrib.auth.urls')),
+    url(r'^oauth/', include('social_django.urls', namespace='social')),
     url(r'^accounts/', include('registration.backends.hmac.urls')),
     url(r'^profile/', include('imager_profile.urls')),
     url(r'^images/', include('imager_images.urls')),
