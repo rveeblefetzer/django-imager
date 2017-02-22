@@ -19,12 +19,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '%ry2ddowk3n65#542l&vcu8g(z4adt$2kc)zdubrddo%ij=zsg'
+SECRET_KEY = os.environ.get('SECRET_KEY', '')
+# SESSION_COOKIE_SECURE = True
+# FILE_UPLOAD_PERMISSIONS = 0644
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(" ")
 
 LOGIN_REDIRECT_URL = 'home'
 
@@ -90,7 +92,7 @@ DATABASES = {
         'NAME': os.environ.get("IMAGER_DB", "imager_db"),
         'USER': os.environ.get("DB_USERNAME", ""),
         'PASSWORD': os.environ.get("DB_PASSWORD", ""),
-        'HOST': '127.0.0.1',
+        'HOST': os.environ.get("DB_ENDPOINT", ""),
         'PORT': '5432',
         'TEST': {
             'NAME': os.environ.get("TEST_IMAGER_DB", "test_imager_db2")
@@ -134,12 +136,13 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'imagersite', 'static')
 STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'MEDIA')
 MEDIA_URL = "/media/"
+
+# EMAIL SETUP
 ACCOUNT_ACTIVATION_DAYS = 3
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Make tags case-insensitive for searching
 TAGGIT_CASE_INSENSITIVE = True
@@ -166,3 +169,11 @@ SOCIAL_AUTH_GITHUB_KEY = os.environ.get("GITHUB_API_KEY", "")
 SOCIAL_AUTH_GITHUB_SECRET = os.environ.get("GITHUB_API_SECRET", "")
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get("GOOGLE_OAUTH2_CLIENT_ID", "")
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ.get("GOOGLE_OAUTH2_CLIENT_SECRET", "")
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = 'rveeblefetzer@gmail.com'
+EMAIL_HOST_PASSWORD = os.environ["EMAIL_HOST_PASSWORD"]
