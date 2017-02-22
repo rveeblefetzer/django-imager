@@ -7,4 +7,6 @@
     {{ form.as_p }}
     <button type="submit">Login</button>
   </form>
+  <a href="{% url 'social:begin' 'github' %}?next={% url 'imager_profile:profile' %}">Login with GitHub</a><br>
+  <a href="{% url 'social:begin' 'google-oauth2' %}">Login with Google</a><br>
 {% endblock %}
