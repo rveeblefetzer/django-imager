@@ -33,12 +33,14 @@ var/
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
+*pip-selfcheck.json
+*pyvenv.cfg
 
 # Unit test / coverage reports
 htmlcov/
 .tox/
 .coverage
-.coverage.*
+!.coveragerc
 .cache
 nosetests.xml
 coverage.xml
@@ -87,3 +89,13 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# venv stuff
+bin/
+share/
+lib/
+
+# Ignore the files in the Media directory, but not the directory itself
+imagersite/MEDIA/*
+!imagersite/MEDIA/.gitkeep
+

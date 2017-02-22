@@ -1,0 +1,23 @@
+{% extends 'imagersite/base.html' %}
+{% load thumbnail %}
+{% block body %}
+<img src="{{ photo.image.url }}">
+<h3>{{ photo.title }}</h3>
+<p>{{ photo.description }}</p>
+{% if photo.tags.count %}
+    <p><strong>Tags:</strong>
+    {% for tag in photo.tags.all %}
+        <a href="{% url 'imager_images:tagged_photos' slug=tag %}">{{ tag }}</a>
+    {% endfor %}
+<p>
+{% endif %}
+<p>Uplodaded: {{ photo.date_uploaded }}</p>
+<p><a href="{% url 'imager_images:edit_photo' photo.id %}">Edit Photo</a></p>
+<br>
+<h4>Similar Photos:</h4>
+{% for s_photo in similar_photos %}
+    {% thumbnail s_photo.image "100x100" crop="center" as im %}
+            <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+    {% endthumbnail %}
+{% endfor %}
+{% endblock %}

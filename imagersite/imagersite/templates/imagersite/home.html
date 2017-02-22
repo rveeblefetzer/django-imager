@@ -1,0 +1,18 @@
+{% extends 'imagersite/base.html' %}
+{% block body %}
+<div class="homeContent">
+    {% if user.is_authenticated %}
+        <h3>Welcome back, {{ user }}</h3>
+        <a href="{% url 'imager_profile:profile' %}">Link to your profile</a>
+
+        <h3>Links to Other Profiles:</h3>
+        <ul>
+            {% for usr in usrlist %}
+                <li><a href="{% url 'imager_profile:user_profile' usr.username %}">{{usr.username}}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <h1>Please Log In or Register to use this app</h1>
+    {% endif %}
+</div>
+{% endblock %}

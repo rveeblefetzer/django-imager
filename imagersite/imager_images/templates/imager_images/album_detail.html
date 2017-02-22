@@ -1,0 +1,34 @@
+{% extends 'imagersite/base.html' %}
+{% load thumbnail %}
+{% block body %}
+    <h5>Images from {{ album.title }}</h5>
+    <img src="{{ album.album_cover.image.url }}">
+    <ul class="thumbList">
+        {% for photo in album.pictures.all %}
+        <li>
+            {% thumbnail photo.image "100x100" crop="center" as im %}
+                <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+            {% endthumbnail %}
+                <a href="{% url 'imager_images:photo' photo.id %}">{{photo.title}}</a>
+        {% endfor %}
+        </li>
+    </ul>
+    <br>
+    <h4>Tag in this Album:</h4>
+    {% for tag in tags %}
+        <a href="{% url 'imager_images:tagged_photos' tag.name %}">{{ tag.name }}</a>
+    {% endfor %}
+    <div class="container text-center pages">
+        {% if albums.has_previous %}
+        <a href="?albums={{ albums.previous_page_number }}&photos={{ photos.number }}">back</a>   
+        {% endif %}
+
+            {{ albums.number }} of {{ albums.paginator.num_pages }}
+
+        {% if albums.has_next %}    
+        <a href="?albums={{ albums.next_page_number }}&photos={{ photos.number }}">next</a>
+        {% endif %}
+    </div>
+{% endblock %}
+
+
