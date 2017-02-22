@@ -33,13 +33,15 @@
                 <li><a href="{% url 'auth_login' %}">Login</a></li>
             {% else %}
                 <li><a href="{% url 'auth_logout' %}">Logout</a></li>
+                <li><a href="{% url 'imager_profile:profile' %}">Profile</a></li>
+                <li><a href="{% url 'imager_images:library' %}">Library</a></li>
             {% endif %}
           </ul>
         </div><!--/.nav-collapse -->
       </div>
     </nav>
 
-    <div class="container">
+    <div class="container mainContainer">
         {% block body %}
         {% endblock %}
     </div>

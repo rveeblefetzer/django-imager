@@ -1,6 +1,11 @@
 body {
   padding-top: 50px;
 }
+
+.mainContainer {
+  margin-top: 60px;
+}
+
 .starter-template {
   padding: 40px 15px;
   text-align: center;
@@ -16,4 +21,23 @@ body {
 }
 .thumbList {
     list-style: none;
+}
+.thumbList li{
+  display: inline-block;
+  margin: 20px;
+  vertical-align: top;
+}
+
+.thumbList li img{
+
+}
+
+.thumbList li a{
+  display: block;
+  text-align: center;
+}
+
+.thumbList li a.tagLink {
+  display: inline;
+  text-align: center;
 }

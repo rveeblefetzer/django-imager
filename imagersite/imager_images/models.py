@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from taggit.managers import TaggableManager
 
 PUBLISH_STATE = (
     ("private", "Private"),
@@ -45,6 +45,7 @@ class Photo(models.Model):
         User,
         related_name="authored",
     )
+    tags = TaggableManager()
 
     image = models.ImageField(upload_to="photos")
 
