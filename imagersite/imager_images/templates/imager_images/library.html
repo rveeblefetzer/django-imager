@@ -55,7 +55,7 @@
 
             {{ photos.number }} of {{ photos.paginator.num_pages }}
 
-        {% if photos.has_next %}    
+        {% if photos.has_next %}
         <a href="?photos={{ photos.next_page_number }}&albums={{ albums.number }}">next</a>
         {% endif %}
     </div>
