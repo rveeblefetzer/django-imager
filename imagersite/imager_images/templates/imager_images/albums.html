@@ -13,4 +13,15 @@
         {% endfor %}
         </li>
     </ul>
+    <div class="container text-center pages">
+        {% if albums.has_previous %}
+        <a href="?albums={{ albums.previous_page_number }}&photos={{ photos.number }}">back</a>   
+        {% endif %}
+
+            {{ albums.number }} of {{ albums.paginator.num_pages }}
+
+        {% if albums.has_next %}    
+        <a href="?albums={{ albums.next_page_number }}&photos={{ photos.number }}">next</a>
+        {% endif %}
+    </div>
 {% endblock %}
