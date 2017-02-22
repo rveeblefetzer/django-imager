@@ -7,6 +7,7 @@ import os
 from faker import Faker
 import datetime
 from django.urls import reverse_lazy
+from bs4 import BeautifulSoup as soup
 
 
 fake = Faker()
@@ -150,12 +151,26 @@ class ImageTestCase(TestCase):
         response = self.client.get(reverse_lazy("imager_images:library"))
         self.assertTrue("next" in response.rendered_content)
 
-    def test_nonpage_defaults_to_firstpage(self):
+    def test_nonpage_defaults_to_first_page(self):
         """Test request for non-numbered Librarypage returns first page."""
         photographer = User.objects.first()
         self.client.force_login(photographer)
         response = self.client.get("/images/library/?thisisntapage")
         self.assertTrue("1 of 1" in response.rendered_content)
+
+    def test_page_shows_max_four_photos(self):
+        """Test pagination on Library shows four photos."""
+        import re
+        photographer = User.objects.first()
+        self.client.force_login(photographer)
+        for pic in range(10):
+            current_pic = ImageFactory.build()
+            current_pic.author = photographer
+            current_pic.save()
+        response = self.client.get(reverse_lazy("imager_images:library"))
+        webpage = soup(response.rendered_content, "html.parser")
+        img_text = webpage.find_all(string=re.compile("Test Image"))
+        self.assertTrue(len(img_text) == 4)
 
 class ImageFrontEndTestCase(TestCase):
     """Test Runner for the front end of the imager_images app."""
