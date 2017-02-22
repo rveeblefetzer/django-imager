@@ -1,4 +1,8 @@
 
+from django.core.paginator import Paginator
+from django.core.paginator import EmptyPage
+from django.core.paginator import PageNotAnInteger
+
 from django.shortcuts import redirect
 from django.views.generic import DetailView, ListView, TemplateView, CreateView
 from django.views.generic.edit import UpdateView
@@ -7,8 +11,8 @@ from django.urls import reverse_lazy
 from imager_images.models import Album, Photo
 
 
-# Create your views here.
 
+# Create your views here.
 class LibraryView(LoginRequiredMixin, TemplateView):
     """View for library."""
 
@@ -17,10 +21,31 @@ class LibraryView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self):
         user = self.request.user
-        album_list = user.owned.all()
-        photo_list = user.authored.all()
         tag_list = Photo.tags.all()
-        return {"albums": album_list, "photos": photo_list, "tags": tag_list}
+
+        photo_list = user.authored.all()
+        photo_paginator = Paginator(photo_list, 4)
+        photo_page = self.request.GET.get('photos')
+
+        try:
+            photo_pages = photo_paginator.page(photo_page)
+        except PageNotAnInteger:
+            photo_pages = photo_paginator.page(1)
+        except EmptyPage:
+            photo_pages = photo_paginator.page(photo_paginator.num_pages)
+
+        album_list = user.owned.all()
+        album_paginator = Paginator(album_list, 4)
+        album_page = self.request.GET.get('albums')
+
+        try:
+            album_pages = album_paginator.page(album_page)
+        except PageNotAnInteger:
+            album_pages = album_paginator.page(1)
+        except EmptyPage:
+            album_pages = album_paginator.page(album_paginator.num_pages)
+
+        return {"albums": album_pages, "photos": photo_pages, "tags": tag_list}
 
 
 class PhotoGalleryView(ListView):
@@ -29,6 +54,7 @@ class PhotoGalleryView(ListView):
     model = Photo
     queryset = Photo.published_photos.all()
     context_object_name = "photos"
+    paginate_by = 4
 
 
 class AlbumGalleryView(ListView):
@@ -36,6 +62,7 @@ class AlbumGalleryView(ListView):
     template_name = "imager_images/albums.html"
     model = Album
     context_object_name = "albums"
+    paginate_by = 4
 
     def get_queryset(self):
         """Modify get_queryset to return list of published albums for specific user."""
@@ -83,6 +110,8 @@ class AlbumDetailView(DetailView):
     """Define a view to handle the photo details."""
     model = Album
     template_name = "imager_images/album_detail.html"
+    paginate_by = 4
+    raise_exception = True
 
     def get_context_data(self, **kwargs):
         """Overwrite get_context_data method to return additional info."""
@@ -93,7 +122,17 @@ class AlbumDetailView(DetailView):
             for tag in photo.tags.all():
                 tag_set.add(tag)
 
-        return {"tags": tag_set, "album": album}
+        photo_paginator = Paginator(photos, self.paginate_by)
+        photo_page = self.request.GET.get('photo_page')
+
+        try:
+            photo_pages = photo_paginator.page(photo_page)
+        except PageNotAnInteger:
+            photo_pages = photo_paginator.page(1)
+        except EmptyPage:
+            photo_pages = photo_paginator.page(photo_paginator.num_pages)
+
+        return {"tags": tag_set, "album": album, "photos": photo_pages}
 
 
 class AddAlbumView(LoginRequiredMixin, CreateView):
@@ -181,4 +220,3 @@ class AllPublicPhotosList(ListView):
         album_list = Album.objects.filter(published="public")
         photo_list = Photo.objects.filter(published="public")
         return {"albums": album_list, "photos": photo_list}
-
