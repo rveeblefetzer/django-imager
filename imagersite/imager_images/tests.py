@@ -123,6 +123,39 @@ class ImageTestCase(TestCase):
         pic.album = [test_photo_set]
         self.assertTrue(Photo.objects.all().get(title="test_title").title == pic.title)
 
+    # WHY U NOT WORK? UNDERSTAND ME
+    # def test_album_pages_on_library(self):
+    #     """Test that library page shows pages for albums"""
+    #     photographer = User.objects.first()
+    #     self.client.force_login(photographer)
+    #     import pdb; pdb.set_trace()
+    #     response = self.client.get("/images/library")
+    #     self.assertInHTML("next", '<div class="container text-center pages">')
+
+    def test_pagination_on_album_list(self):
+        """Test authenticated user sees pagination on Library page."""
+        photographer = User.objects.first()
+        self.client.force_login(photographer)
+        response = self.client.get(reverse_lazy("imager_images:library"))
+        self.assertTrue("1 of 1" in response.rendered_content)
+
+    def test_page_next_on_album_list(self):
+        """Test authenticated user sees next-page link on Library page."""
+        photographer = User.objects.first()
+        self.client.force_login(photographer)
+        for pic in range(10):
+            current_pic = ImageFactory.build()
+            current_pic.author = photographer
+            current_pic.save()
+        response = self.client.get(reverse_lazy("imager_images:library"))
+        self.assertTrue("next" in response.rendered_content)
+
+    def test_nonpage_defaults_to_firstpage(self):
+        """Test request for non-numbered Librarypage returns first page."""
+        photographer = User.objects.first()
+        self.client.force_login(photographer)
+        response = self.client.get("/images/library/?thisisntapage")
+        self.assertTrue("1 of 1" in response.rendered_content)
 
 class ImageFrontEndTestCase(TestCase):
     """Test Runner for the front end of the imager_images app."""
@@ -209,3 +242,6 @@ class ImageFrontEndTestCase(TestCase):
     #     self.client.force_login(user)
     #     response = self.client.get(reverse_lazy('home'))
     #     self.assertTrue(Photo.objects.filter('private') in str(response.content))
+
+    # Tests for pagination
+
