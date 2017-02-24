@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'imager_profile',
     'imagersite',
     'imager_images',
-    'sorl.thumbnail'
+    'sorl.thumbnail',
+    'taggit'
 ]
 
 MIDDLEWARE = [
@@ -148,3 +149,7 @@ EMAIL_USE_TLS = True
 
 EMAIL_HOST_USER = 'rveeblefetzer@gmail.com'
 EMAIL_HOST_PASSWORD = os.environ["EMAIL_PASSWORD"]
+
+# Make tags case-insensitive for searching
+TAGGIT_CASE_INSENSITIVE = True
+
